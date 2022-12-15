@@ -98,6 +98,8 @@ class Settings{
         this.$register_login = this.$register.find(".ac-game-settings-option");
         this.$register.hide();
 
+        this.$acwing_login = this.$settings.find(".ac-game-settings-acwing img");
+
         this.root.$ac_game.append(this.$settings);
 
         this.start();
@@ -109,8 +111,13 @@ class Settings{
     }
 
     add_listening_events(){
+        let that = this;
         this.add_listening_events_login();
         this.add_listening_events_register();
+
+        this.$acwing_login.click(function(){
+            that.acwing_login();
+        });
     }
 
     add_listening_events_login(){
@@ -133,6 +140,20 @@ class Settings{
         });
     }
 
+    acwing_login(){
+        // console.log("click acwing_login");
+        $.ajax({
+            url: "https://app2987.acapp.acwing.com.cn/settings/acwing/web/apply_code/",
+            type: "GET",
+            success: function(resp){
+                // console.log(resp);
+                if(resp.result === "success"){
+                    window.location.replace(resp.apply_code_url);
+                }
+            }
+        });
+    }
+
     login_on_remote(){  // 功能
         let that = this;
         let username = this.$login_username.val();
@@ -147,7 +168,7 @@ class Settings{
                 password: password,
             },
             success: function(resp){
-                console.log(resp);
+                // console.log(resp);
                 if(resp.result === "success"){
                     location.reload();
                 } else {
@@ -178,7 +199,7 @@ class Settings{
                     password_confirm: password_confirm,
                 },
                 success: function(resp){
-                    console.log(resp);
+                    // console.log(resp);
                     if(resp.result === "success"){
                         location.reload();
                     } else {
@@ -196,7 +217,7 @@ class Settings{
             url: "https://app2987.acapp.acwing.com.cn/settings/logout/",
             type: "GET",
             success: function(resp){
-                console.log(resp);
+                // console.log(resp);
                 if(resp.result === "success"){
                     location.reload();
                 }
@@ -224,11 +245,11 @@ class Settings{
                 platform: that.platform,
             },
             success: function(resp){
-                console.log(resp);
+                // console.log(resp);
                 if(resp.result === "success"){
                     that.username = resp.username;
                     that.photo = resp.photo;
-                    console.log(resp.photo);
+                    // console.log(resp.photo);
                     that.hide();
                     that.root.menu.show();
                 } else {
