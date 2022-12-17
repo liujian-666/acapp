@@ -26,13 +26,13 @@ class AcGameMenu{
         let that = this;
         this.$single_mode.click(function(){
             that.hide();
-            that.root.playground.show();
+            that.root.playground.show("single mode");
         });
         this.$multi_mode.click(function(){
-            console.log("click multi");
+            that.hide();
+            that.root.playground.show("multi mode");
         });
         this.$settings.click(function(){
-            console.log("click settings");
             that.root.settings.logout_on_remote();
         });
     }
