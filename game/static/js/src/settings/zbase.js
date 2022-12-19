@@ -215,18 +215,20 @@ class Settings{
     }
 
     logout_on_remote(){  // 功能
-        if(this.platform === "ACAPP") return false;
-
-        $.ajax({
-            url: "https://app2987.acapp.acwing.com.cn/settings/logout/",
-            type: "GET",
-            success: function(resp){
-                // console.log(resp);
-                if(resp.result === "success"){
-                    location.reload();
+        if(this.platform === "ACAPP"){
+            this.root.AcWingOS.api.window.close();
+        } else {
+            $.ajax({
+                url: "https://app2987.acapp.acwing.com.cn/settings/logout/",
+                type: "GET",
+                success: function(resp){
+                    // console.log(resp);
+                    if(resp.result === "success"){
+                        location.reload();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     register(){  // 界面
@@ -243,8 +245,8 @@ class Settings{
     acapp_login(appid, redirect_uri, scope, state){
         let that = this;
         this.root.AcWingOS.api.oauth2.authorize(appid, redirect_uri, scope, state, function(resp){
-            console.log(resp);
-            console.log("-----acapp_login()-----")
+            // console.log(resp);
+            // console.log("-----acapp_login()-----")
             if(resp.result === "success"){
                 that.username = resp.username;
                 that.photo = resp.photo;
