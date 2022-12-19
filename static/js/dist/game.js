@@ -137,7 +137,7 @@ class ChatField{
                 if(text){
                     that.add_message(username, text);
                     that.$input.val("");
-                    that.playground.mps.send_message(text);
+                    that.playground.mps.send_message(username, text);
                 }
                 return false;
             }
@@ -752,7 +752,7 @@ class MultiPlayerSocket{
             } else if(event === "blink"){
                 that.receive_blink(uuid, data.tx, data.ty);
             } else if(event === "message"){
-                that.receive_message(uuid, data.text);
+                that.receive_message(uuid, data.username, data.text);
             }
         }
     }
@@ -871,20 +871,18 @@ class MultiPlayerSocket{
         }
     }
 
-    send_message(text){
+    send_message(username, text){
         let that = this;
         this.ws.send(JSON.stringify({
             'event': "message",
             'uuid': that.uuid,
+            'username': username,
             'text': text,
         }));
     }
 
-    receive_message(uuid, text){
-        let player = this.get_player(uuid);
-        if(player){
-            player.playground.chat_field.add_message(player.username, text);
-        }
+    receive_message(uuid, username, text){
+        this.playground.chat_field.add_message(username, text);
     }
 
 }

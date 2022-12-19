@@ -32,7 +32,7 @@ class ChatField{
                 if(text){
                     that.add_message(username, text);
                     that.$input.val("");
-                    that.playground.mps.send_message(text);
+                    that.playground.mps.send_message(username, text);
                 }
                 return false;
             }
