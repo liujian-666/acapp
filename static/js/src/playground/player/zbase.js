@@ -65,10 +65,10 @@ class Player extends AcGameObject{
         this.playground.game_map.$canvas.on("contextmenu", function(){
             return false;
         });
-        // add mouse listening evevts;
+        // add "mouse" listening evevts;
         this.playground.game_map.$canvas.mousedown(function(e){
             if(that.playground.state !== "fighting")
-                return false;
+                return true;
 
             const rect = that.ctx.canvas.getBoundingClientRect();
             if(e.which === 3){
@@ -103,8 +103,20 @@ class Player extends AcGameObject{
                 that.cur_skill = null;
             }
         });
-        // add keyboard events;
-        $(window).keydown(function(e){
+        // add "keyboard" events;
+        this.playground.game_map.$canvas.keydown(function(e){
+            if(e.which === 13){  // Enter：回车
+                if(that.playground.mode === "multi mode"){
+                    that.playground.chat_field.show_input();
+                    return false;
+                }
+            } else if(e.which === 27){
+                if(that.playground.mode === "multi mode"){
+                    that.playground.chat_field.hide_input();
+                    return false;
+                }
+            }
+
             if(that.playground.state !== "fighting")
                 return true;
 
