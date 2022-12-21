@@ -7,6 +7,7 @@ class Player(models.Model):
     # blank=True,表示代码中创建数据库记录时该字段可传空白(空串,空字符串)
     # null=True,表示数据库创建时该字段可不填,用NULL填充
     openid = models.CharField(default="", max_length=50, blank=True, null=True)
+    score = models.IntegerField(default=1500)
 
     def __str__(self):
         return str(self.user)
