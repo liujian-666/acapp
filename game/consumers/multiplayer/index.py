@@ -15,12 +15,17 @@ from channels.db import database_sync_to_async
 class MultiPlayer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        await self.accept()
+        user = self.scope['user']
+        print(user, user.is_authenticated)
+        if user.is_authenticated:
+            await self.accept()
+        else:
+            await self.close()
 
 
 
     async def disconnect(self, close_code):
-        if self.room_name:
+        if hasattr(self, 'room_name') and self.room_name:
             await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
 
@@ -47,51 +52,6 @@ class MultiPlayer(AsyncWebsocketConsumer):
         client.add_player(player.score, data['uuid'], data['username'], data['photo'], self.channel_name)
         # Close!
         transport.close()
-
-        '''
-        self.room_name = None
-
-        start = 0
-        if data['username'] != "liujian" or data['username'] != "墙缝里的草":
-            start = 1000
-
-        for i in range(start, 100000000):
-            name = "room-%d" % (i)
-            if not cache.has_key(name) or len(cache.get(name)) < settings.ROOM_CAPACITY:
-                self.room_name = name
-                break
-
-        if not self.room_name:
-            return
-
-        if not cache.has_key(name):
-            cache.set(self.room_name, [], 3600)  # 有效期1小时
-
-        for player in cache.get(self.room_name):
-            await self.send(text_data=json.dumps({
-                'event': "create_player",
-                'uuid': player['uuid'],
-                'username': player['username'],
-                'photo': player['photo'],
-            }))
-
-        await self.channel_layer.group_add(self.room_name, self.channel_name)
-
-        players = cache.get(self.room_name)
-        players.append({
-            'uuid': data['uuid'],
-            'username': data['username'],
-            'photo': data['photo'],
-        })
-        cache.set(self.room_name, players, 3600)
-        await self.channel_layer.group_send(self.room_name, {
-            'type': "group_send_event",
-            'event': "create_player",
-            'uuid': data['uuid'],
-            'username': data['username'],
-            'photo': data['photo'],
-        })
-        '''
 
 
 

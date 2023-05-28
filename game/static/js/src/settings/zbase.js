@@ -228,7 +228,7 @@ class Settings{
             this.$register_error_message.html("密码不一致");
         } else {
             $.ajax({
-                url: "https://app5538.acapp.acwing.com.cn/settings/register",
+                url: "https://app5538.acapp.acwing.com.cn/settings/register/",
                 type: "POST",
                 data: {
                     username,
